@@ -3,6 +3,7 @@ package com.ibrahim.movie.moviemanager.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -12,6 +13,7 @@ import com.ibrahim.movie.moviemanager.model.ProductionHouseRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,7 +50,7 @@ public class ProductionHouseController {
         return productionHouseRepository.save(productionHouse);
     }
 
-    @PutMapping("/productionhouses")
+    @PutMapping("/productionhouses/{id}")
     public ResponseEntity<ProductionHouse> update(@PathVariable(value = "id") Long productionHouseId, @Valid @RequestBody ProductionHouse productionHouse) throws ResourceNotFoundException {
         ProductionHouse existingProductionHouse = productionHouseRepository.findById(productionHouseId)
             .orElseThrow(()-> new ResourceNotFoundException("Production house not found ::" + productionHouseId) );
@@ -59,6 +61,7 @@ public class ProductionHouseController {
         return ResponseEntity.ok(updatedUser);
     }
 
+    @DeleteMapping("/productionhouses/{id}")
     public Map <String, Boolean> delete(@PathVariable(value = "id") Long productionHouseId) throws ResourceNotFoundException {
         ProductionHouse productionHouse = productionHouseRepository.findById(productionHouseId)
             .orElseThrow(()-> new ResourceNotFoundException("Production house not found ::" + productionHouseId) );

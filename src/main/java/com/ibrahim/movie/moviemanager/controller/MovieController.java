@@ -1,6 +1,7 @@
 package com.ibrahim.movie.moviemanager.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -30,7 +31,18 @@ public class MovieController {
     @Autowired
     private MovieRepository movieRepository; 
 
+    @Autowired
     private ProductionHouseRepository productionHouseRepository;
+
+    @GetMapping("/movies")
+    public List<Movie> getMovies() {
+        return movieRepository.findAll();
+    }
+
+    @GetMapping("/movies/{id}")
+    public Optional<Movie> getAMovie(@PathVariable(value = "id") Long id) {
+        return movieRepository.findById(id);
+    }
     
     @GetMapping("/productionhouses/{phid}/movies")
     public List<Movie> getMoviesByProductionHouse(@PathVariable(value = "phid") Long phId) {
@@ -43,7 +55,7 @@ public class MovieController {
         return productionHouseRepository.findById(phId).map(productionHouse->{
             movie.setProductionHouse(productionHouse);
             return movieRepository.save(movie);
-        }).orElseThrow(() -> new ResourceNotFoundException("instructor not found"));
+        }).orElseThrow(() -> new ResourceNotFoundException("Production house not found"));
     }
 
     @PutMapping("/productionhouses/{phid}/movies/{movieid}")
